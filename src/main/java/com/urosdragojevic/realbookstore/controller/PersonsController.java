@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ public class PersonsController {
     }
 
     @GetMapping("/persons/{id}")
+    @PreAuthorize("hasAuthority('VIEW_PERSON')")
     public String person(@PathVariable int id, Model model, HttpSession session) {
         String csrfToken = session.getAttribute("CSRF_TOKEN").toString();
         model.addAttribute("CSRF_TOKEN", session.getAttribute("CSRF_TOKEN"));
@@ -41,6 +43,7 @@ public class PersonsController {
     }
 
     @GetMapping("/myprofile")
+    @PreAuthorize("hasAuthority('VIEW_MY_PROFILE')")
     public String self(Model model, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         model.addAttribute("person", personRepository.get("" + user.getId()));
@@ -48,6 +51,7 @@ public class PersonsController {
     }
 
     @DeleteMapping("/persons/{id}")
+    @PreAuthorize("hasAuthority('UPDATE_PERSON')")
     public ResponseEntity<Void> person(@PathVariable int id) {
         personRepository.delete(id);
         userRepository.delete(id);
@@ -56,6 +60,7 @@ public class PersonsController {
     }
 
     @PostMapping("/update-person")
+    @PreAuthorize("hasAuthority('UPDATE_PERSON')")
     public String updatePerson(Person person, HttpSession session, @RequestParam("csrdToken") String csrfToken) throws AccessDeniedException {
         if (!csrfToken.equalsIgnoreCase(session.getAttribute("CSRF_TOKEN").toString())) {
             throw new AccessDeniedException("CSRF token is invalid");
@@ -72,6 +77,7 @@ public class PersonsController {
 
     @GetMapping(value = "/persons/search", produces = "application/json")
     @ResponseBody
+    @PreAuthorize("hasAuthority('VIEW_PERSON_LIST')")
     public List<Person> searchPersons(@RequestParam String searchTerm) throws SQLException {
         return personRepository.search(searchTerm);
     }
