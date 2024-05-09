@@ -7,7 +7,7 @@
           <option name="delegateBuildToMaven" value="false" />
           <option name="environmentProperties">
             <map>
-              <entry key="SONAR_TOKEN" value="&lt;insert_token_here&gt;" />
+              <entry key="SONAR_TOKEN" value="sqa_e5d912d585e8579854f033a7549cc21aeb8051b0" />
             </map>
           </option>
           <option name="jreName" value="#USE_PROJECT_JDK" />
@@ -22,7 +22,6 @@
       </option>
       <option name="myRunnerParameters">
         <MavenRunnerParameters>
-          <option name="cmdOptions" />
           <option name="profiles">
             <set />
           </option>
@@ -34,9 +33,6 @@
           <option name="pomFileName" />
           <option name="profilesMap">
             <map />
-          </option>
-          <option name="projectsCmdOptionValues">
-            <list />
           </option>
           <option name="resolveToWorkspace" value="false" />
           <option name="workingDirPath" value="$PROJECT_DIR$" />
