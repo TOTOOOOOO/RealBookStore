@@ -1,5 +1,6 @@
 package com.urosdragojevic.realbookstore.repository;
 
+import com.urosdragojevic.realbookstore.audit.AuditLogger;
 import com.urosdragojevic.realbookstore.domain.Genre;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,6 @@ public class GenreRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenreRepository.class);
 
-
     private final DataSource dataSource;
 
     public GenreRepository(DataSource dataSource) {
@@ -36,6 +36,7 @@ public class GenreRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("failed to retrieve all the genres");
         }
         return genreList;
     }
@@ -51,6 +52,7 @@ public class GenreRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("failed to retrieve all the genres for a book");
         }
         return genreList;
     }

@@ -1,5 +1,6 @@
 package com.urosdragojevic.realbookstore.repository;
 
+import com.urosdragojevic.realbookstore.audit.AuditLogger;
 import com.urosdragojevic.realbookstore.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.sql.Statement;
 
 @Repository
 public class UserRepository {
-
+    private static final AuditLogger auditLogger = AuditLogger.getAuditLogger(UserRepository.class);
     private static final Logger LOG = LoggerFactory.getLogger(UserRepository.class);
 
     private DataSource dataSource;
@@ -47,6 +48,7 @@ public class UserRepository {
             return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("failed to validate credentials for user: "  + username);
         }
         return false;
     }
@@ -59,6 +61,9 @@ public class UserRepository {
             statement.executeUpdate(query);
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("failed to delete user with id: " + userId);
         }
+
+        auditLogger.audit("user with id: " + userId +  " is deleted");
     }
 }
